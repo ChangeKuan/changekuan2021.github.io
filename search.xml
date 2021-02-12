@@ -4,13 +4,19 @@
   
     
     <entry>
-      <title>This is my first blog</title>
-      <link href="2021/02/12/this-is-my-first-blog/"/>
-      <url>2021/02/12/this-is-my-first-blog/</url>
+      <title>First blog</title>
+      <link href="2021/02/12/first-blog/"/>
+      <url>2021/02/12/first-blog/</url>
       
-        <content type="html"><![CDATA[<h1 id="Welcoming-speech"><a href="#Welcoming-speech" class="headerlink" title="Welcoming speech"></a>Welcoming speech</h1><p>Hi everyone：<br>Welcome to Kuan’s blog. Today is February 12, 2021, the birtyday of my blog website.<br>I’ll update my article here occasionally from today. Please give me more advice.<br>Thanks.</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="Welcoming-speech"><a href="#Welcoming-speech" class="headerlink" title="Welcoming speech"></a>Welcoming speech</h1><p>Hi everyone：<br>Welcome to Kuan’s blog. Today is February 12, 2021, <strong>the birtyday of my blog website</strong>.<br>I’ll update my article here occasionally from today. Please give me more advice.<br>Thanks.</p>]]></content>
       
       
+      
+        <tags>
+            
+            <tag> Happy Birthday </tag>
+            
+        </tags>
       
     </entry>
     

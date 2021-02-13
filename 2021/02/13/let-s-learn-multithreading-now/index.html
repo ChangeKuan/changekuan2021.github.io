@@ -442,12 +442,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/C-IT-Skills/">
+                                <span class="chip bg-color">C++,IT,Skills</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Skills/" class="post-category">
+                                Skills
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -470,14 +483,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    6.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    27 分
                 </div>
                 
 
@@ -505,7 +518,689 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><h2 id="并发与并行"><a href="#并发与并行" class="headerlink" title="并发与并行"></a>并发与并行</h2><p>并行：在同一时间点发生。<br>并发：在某个时间段内同时发生。</p>
+<h2 id="进程与线程"><a href="#进程与线程" class="headerlink" title="进程与线程"></a>进程与线程</h2><p>进程：<strong>运行起来了</strong>的可执行文件。<br>线程：代码的一条执行通路，可以通过自己写代码来创建其他线程。<br>主线程：进程执行起来了之后，就会有一个唯一的主线程默默启动，寿命和进程同步。<br>多线程：一个进程里，多个线程并发进行。<strong>但是如果多个线程同时去访问一个资源的话，很容易出问题。</strong></p>
+<h2 id="并发的实现方法"><a href="#并发的实现方法" class="headerlink" title="并发的实现方法"></a>并发的实现方法</h2><p>1、创建多个进程（进程之间的通信：管道文件，信息队列，共享内存，socket通信）<br>2、单独一个进程创建多个线程（每个线程有自己独立的运行路径，所有线程共享进程内存。<strong>需要考虑到数据的一致性</strong>）<br>所以优先考虑多线程的并发技术使用。</p>
+<h2 id="C-11"><a href="#C-11" class="headerlink" title="C++11"></a>C++11</h2><p>C++11的新标准线程库，增加了对多线程的支持，可以执行大大提高。（以往：windows：createthread()使用创建线，linux:pthread_create，以往的基本不能跨平台）</p>
+<h1 id="线程的创建"><a href="#线程的创建" class="headerlink" title="线程的创建"></a>线程的创建</h1><h2 id="thread-，join-，detach-，joinable"><a href="#thread-，join-，detach-，joinable" class="headerlink" title="thread()，join()，detach()，joinable()"></a>thread()，join()，detach()，joinable()</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">myprint</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"我自己创造的线程1"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程1结束"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">TA</span> <span class="token punctuation">{</span>
+
+	<span class="token keyword">int</span> <span class="token operator">&amp;</span>m_i<span class="token punctuation">;</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+
+	<span class="token function">TA</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token operator">&amp;</span> i<span class="token punctuation">)</span> <span class="token operator">:</span><span class="token function">m_i</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+	<span class="token keyword">void</span> <span class="token keyword">operator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token comment">//重载括号，线程入口</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"m_i 的值为"</span> <span class="token operator">&lt;&lt;</span>m_i<span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程2结束"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">//自己创建一个线程，也要从一个函数开始。主线程结束了，如子线程没有执行完毕，可能会被强行终结。</span>
+	<span class="token comment">//现在就是有两条线路在跑。即使一条路堵住了，不耽误另一条执行</span>
+	<span class="token comment">//thread是一个类，括号里的参数myprint是可调用对象</span>
+	thread <span class="token function">myobj</span><span class="token punctuation">(</span>myprint<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//创建了线程，入口是myprint函数</span>
+
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>myobj<span class="token punctuation">.</span><span class="token function">joinable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"joinable == true"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">else</span> <span class="token punctuation">{</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"joinable==false"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	myobj<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//阻塞主线程，希望主线程等待子线程，等我子线程执行完再放行。不添加join，可能子线程还没执行完，你就结束了。</span>
+	<span class="token comment">//myobj.detach();//使用了之后，就不能改join了</span>
+
+	<span class="token keyword">int</span> myi <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
+	TA <span class="token function">ta</span><span class="token punctuation">(</span>myi<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//使用了构造函数。参数引用进去的，有隐患。在主线程里，如果主线程结束了，就不能打印它的值了</span>
+	thread <span class="token function">myobj2</span><span class="token punctuation">(</span>ta<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//使用类对象来创建子线程。这里调用了拷贝构造函数</span>
+	myobj2<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">//Q：一旦调用了detach，主线程没了，我还能使用这个类吗，还能使用他的成员函数吗？</span>
+	<span class="token comment">//A：可以。ta对象已经被复制到子线程中了，生成了一个新的类对象。二者没有关系了</span>
+
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"i love china1"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span><span class="token comment">//主线程,从main函数开始执行</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"i love china2"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="参数的传递"><a href="#参数的传递" class="headerlink" title="参数的传递"></a>参数的传递</h2><p>建议值传递，尽量不要使用引用和传指针。不要使用隐式类型转换，在创建线程的时候就把类型转换好。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token comment">//void myprint(const int&amp; i, char* mprint) {</span>
+<span class="token keyword">void</span> <span class="token function">myprint</span><span class="token punctuation">(</span><span class="token keyword">const</span> <span class="token keyword">int</span><span class="token operator">&amp;</span> i<span class="token punctuation">,</span> <span class="token keyword">const</span> string <span class="token operator">&amp;</span>mprint<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//正确写法，用引用来接参数</span>
+	cout <span class="token operator">&lt;&lt;</span> i <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	cout <span class="token operator">&lt;&lt;</span> mprint <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">void</span> <span class="token function">myprint2</span><span class="token punctuation">(</span>unique_ptr<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> up<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//正确写法，用引用来接参数</span>
+	<span class="token comment">//cout &lt;&lt; i &lt;&lt; endl;</span>
+	<span class="token comment">//cout &lt;&lt; mprint &lt;&lt; endl;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">public</span><span class="token operator">:</span>
+	<span class="token keyword">int</span> m_a<span class="token punctuation">;</span>
+	<span class="token function">A</span><span class="token punctuation">(</span><span class="token keyword">int</span> a<span class="token punctuation">)</span><span class="token operator">:</span><span class="token function">m_a</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">{</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"ok"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	
+	<span class="token keyword">void</span> <span class="token function">thread_work</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"任意成员函数thread_work启动"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">myprint3</span><span class="token punctuation">(</span>A a<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	cout <span class="token operator">&lt;&lt;</span> a<span class="token punctuation">.</span>m_a <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token comment">//cout &lt;&lt; mprint &lt;&lt; endl;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token keyword">int</span><span class="token operator">&amp;</span> myarray <span class="token operator">=</span> i<span class="token punctuation">;</span>
+	<span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">"this is a test"</span><span class="token punctuation">;</span>
+	<span class="token comment">//thread myobj(myprint, myarray, buf);//函数名，函数的各参数。不要使用引用和传指针。有隐患</span>
+	thread <span class="token function">myobj</span><span class="token punctuation">(</span>myprint<span class="token punctuation">,</span> i<span class="token punctuation">,</span> <span class="token function">string</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//正确写法,在创建线程的时候就把类型转换好，用临时的对象做参数来赋值，它一定会在进程结束前被构造出来。不论join还是detach</span>
+	myobj<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	A <span class="token function">a</span><span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	std<span class="token operator">::</span>thread <span class="token function">myobj2</span><span class="token punctuation">(</span>myprint3<span class="token punctuation">,</span>std<span class="token operator">::</span><span class="token function">ref</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//a在线程里会被修改</span>
+	<span class="token comment">//往线程里传递类对象的参数，不论你是不是引用，系统会默认使用拷贝，原来的主线程里的不会被改变。如果我想要要改，不希望被拷贝，则使用std::ref</span>
+	myobj2<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token comment">//传递智能指针.需要使用move函数，才能正确</span>
+	unique_ptr<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> <span class="token function">myp</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token keyword">int</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	std<span class="token operator">::</span>thread <span class="token function">myobj3</span><span class="token punctuation">(</span>myprint2<span class="token punctuation">,</span> std<span class="token operator">::</span><span class="token function">move</span><span class="token punctuation">(</span>myp<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	myobj3<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token comment">//用任意的成员函数来作为线程的入口</span>
+	A <span class="token function">a2</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	std<span class="token operator">::</span>thread <span class="token function">myobj4</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>A<span class="token operator">::</span>thread_work<span class="token punctuation">,</span> std<span class="token operator">::</span><span class="token function">ref</span><span class="token punctuation">(</span>a2<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//入口：类函数，告诉你是具体哪个对象的函数，函数的参数……。也可把std::ref(a2)改成&amp;a2</span>
+	myobj4<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="容器管理线程"><a href="#容器管理线程" class="headerlink" title="容器管理线程"></a>容器管理线程</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">	<span class="token keyword">void</span> <span class="token function">myprint</span><span class="token punctuation">(</span><span class="token keyword">int</span> num<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"myprint线程开始了，编号："</span> <span class="token operator">&lt;&lt;</span> num <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"myprint线程结束了，编号："</span> <span class="token operator">&lt;&lt;</span> num <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+<span class="token comment">//创建和等待多个线程</span>
+	vector<span class="token operator">&lt;</span>thread<span class="token operator">&gt;</span> mythreads<span class="token punctuation">;</span><span class="token comment">//使用容器管理各个线程</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		mythreads<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span><span class="token function">thread</span><span class="token punctuation">(</span>myprint<span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//创建了十个线程.执行顺序是乱的，很复杂，很随机</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> iter <span class="token operator">=</span> mythreads<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> iter <span class="token operator">!=</span> mythreads<span class="token punctuation">.</span><span class="token function">end</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token operator">++</span>iter<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		iter<span class="token operator">-&gt;</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//等待十个线程</span>
+	<span class="token punctuation">}</span>
+
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"i love china"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="互斥量和锁"><a href="#互斥量和锁" class="headerlink" title="互斥量和锁"></a>互斥量和锁</h1><h2 id="mutex，lock-，unlock-，lock-guard"><a href="#mutex，lock-，unlock-，lock-guard" class="headerlink" title="mutex，lock()，unlock()，lock_guard"></a>mutex，lock()，unlock()，lock_guard</h2><p>对于只读数据，不怎么需要特别注意的地方.对于有读有写的数据，比如2个写，八个来读，如果没有特别处理，会出问题。所以读的时候不能写，写的时候不能读，写的时候其他线程不能读写.<br>引入互斥量mutex的概念，使用lock（）加锁，只有一个线程能够锁定成功，成功的标志是返回了。没成功就是一直会等待锁成功。<br>lock()和unlock()成对使用（**这里的成对是指每个分支要成对，不是数量上的成对，比如if有两个出口，两个出口都要写unlock()**），在需要保护共享数据的地方加。<br>怕你忘记。所以有一个东西叫lockguard的类模板，帮你自动lock()，unlock()。用了lockguard另外两个就不许用了。原理，lockguard构造即执行了lock()，它析构的时候会执行unlock()。可以使用{}指定lockguard的作用范围。</p>
+<p>死锁问题，必须有两个互斥量以上才有可能发生。比如：线程A：正在锁金锁，锁完之后，它准备去锁银锁……被切换了。线程B：正在锁银锁，银锁锁完了，它准备去锁金锁……<br>解决办法：保证上锁的顺序一致即可。大家都先锁金锁再上银锁。<br>std::lock(互斥锁1，互斥锁2，……)函数使用。在分别上锁的时候，如果遇到不能上锁的情况下，它会先释放自己已经锁了的，过一会再来尝试</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> shared_v <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span> <span class="token punctuation">}</span><span class="token punctuation">;</span><span class="token comment">//共享数据</span>
+<span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+	<span class="token keyword">void</span> <span class="token function">inMsgRecvQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//线程1，插入命令到消息队列</span>
+		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			cout <span class="token operator">&lt;&lt;</span> <span class="token string">"插入命令："</span> <span class="token operator">&lt;&lt;</span> i <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+			std<span class="token operator">::</span><span class="token function">lock</span><span class="token punctuation">(</span>my_mutex1<span class="token punctuation">,</span> my_mutex2<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//相当于每一个互斥量执行lock操作，</span>
+			std<span class="token operator">::</span>lock_guard<span class="token operator">&lt;</span>mutex<span class="token operator">&gt;</span> <span class="token function">sbgurad1</span><span class="token punctuation">(</span>my_mutex1<span class="token punctuation">,</span> std<span class="token operator">::</span>adopt_lock<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//智能lock,构造时会自动执行lock函数。但是前面已经执行了lock操作，需要添加std::adopt_lock参数来避免问题</span>
+			std<span class="token operator">::</span>lock_guard<span class="token operator">&lt;</span>mutex<span class="token operator">&gt;</span> <span class="token function">sbgurad2</span><span class="token punctuation">(</span>my_mutex2<span class="token punctuation">,</span> std<span class="token operator">::</span>adopt_lock<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//智能lock,构造时会自动执行lock函数。但是前面已经执行了lock操作，需要添加std::adopt_lock参数来避免问题</span>
+			msgRecvQueue<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">void</span> <span class="token function">outMsgRecvQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//线程2，读取命令到消息队列</span>
+		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			my_mutex1<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//上锁</span>
+			my_mutex2<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//上锁</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>msgRecvQueue<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				<span class="token comment">//消息不为空</span>
+				<span class="token keyword">int</span> command <span class="token operator">=</span> msgRecvQueue<span class="token punctuation">.</span><span class="token function">front</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				msgRecvQueue<span class="token punctuation">.</span><span class="token function">pop_front</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//处理数据</span>
+				my_mutex1<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				my_mutex2<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+			<span class="token keyword">else</span> <span class="token punctuation">{</span>
+				<span class="token comment">//消息为空</span>
+				cout <span class="token operator">&lt;&lt;</span> <span class="token string">"读取命令，但是消息队列是空的"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+				my_mutex1<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//因为有两个出口，所以每个出口都要写上unlock</span>
+				my_mutex2<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token keyword">private</span><span class="token operator">:</span>
+	std<span class="token operator">::</span>list<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> msgRecvQueue<span class="token punctuation">;</span><span class="token comment">//玩家命令</span>
+	std<span class="token operator">::</span>mutex my_mutex1<span class="token punctuation">;</span><span class="token comment">//创建一个互斥量</span>
+	std<span class="token operator">::</span>mutex my_mutex2<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">myprint</span><span class="token punctuation">(</span><span class="token keyword">int</span> num<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"id:"</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">get_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token string">"线程打印shared_v数据"</span> <span class="token operator">&lt;&lt;</span> shared_v<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">&lt;&lt;</span> shared_v<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">&lt;&lt;</span> shared_v<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	A myobj<span class="token punctuation">;</span>
+
+	std<span class="token operator">::</span>thread <span class="token function">mythread</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>A<span class="token operator">::</span>outMsgRecvQueue<span class="token punctuation">,</span> <span class="token operator">&amp;</span>myobj<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//第二个参数是引用，这样才能保证操作的是同一个对象</span>
+	std<span class="token operator">::</span>thread <span class="token function">mythread2</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>A<span class="token operator">::</span>inMsgRecvQueue<span class="token punctuation">,</span> <span class="token operator">&amp;</span>myobj<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//第二个参数是引用，这样才能保证操作的是同一个对象</span>
+
+	mythread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	mythread2<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="unique-lock"><a href="#unique-lock" class="headerlink" title="unique_lock"></a>unique_lock</h1><h2 id="try-lock-，release"><a href="#try-lock-，release" class="headerlink" title="try_lock()，release()"></a>try_lock()，release()</h2><p>uniquelock里面的成员函数：内置unlock（）的作用：就是假设你有时候相处离别的非共享代码的时候想解锁了，可以手动设置成unlock。弄完了再回来加锁。 try_lock（），尝试加锁，成功返回true，失败返回false。<br>release（）释放对于mutex的管理权，sbguard和mutex取消关系，返回的是互斥量的指针。<br>则需要你自己手动unlock。std::mutex * ptx = sbgurad2.release();  ptx-&gt;unlock();<br>锁住的代码少，粒度小，执行效率高。锁住的代码多，粒度大，效率低。<br>uniquelock的所有权的传递，一个uniquelock和一个mutex配对，所有权可以转移。使用std::unique_lock<a href="std::mutex">std::mutex</a> sbgurad2(std::move(sbgurad1));实现转移。也可以通过函数，构造临时对象，获得所有权，然后return给调用函数的对象。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+	<span class="token keyword">void</span> <span class="token function">inMsgRecvQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//线程1，插入命令到消息队列</span>
+		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			cout <span class="token operator">&lt;&lt;</span> <span class="token string">"插入命令："</span> <span class="token operator">&lt;&lt;</span> i <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+			my_mutex1<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//相当于每一个互斥量执行lock操作，</span>
+			std<span class="token operator">::</span>lock_guard<span class="token operator">&lt;</span>std<span class="token operator">::</span>mutex<span class="token operator">&gt;</span> <span class="token function">sbgurad1</span><span class="token punctuation">(</span>my_mutex1<span class="token punctuation">,</span> std<span class="token operator">::</span>adopt_lock<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//智能lock,构造时会自动执行lock函数。前面已经执行了lock操作，需要添加std::adopt_lock参数来避免问题</span>
+
+			std<span class="token operator">::</span>unique_lock<span class="token operator">&lt;</span>std<span class="token operator">::</span>mutex<span class="token operator">&gt;</span> <span class="token function">sbgurad2</span><span class="token punctuation">(</span>my_mutex2<span class="token punctuation">,</span> std<span class="token operator">::</span>try_to_lock<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//unique_lock比lockguard好用，但是效率低，占用多,try_to_lock（不能先lock）不会卡住，拿不到锁就马上返回走人</span>
+
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>sbgurad2<span class="token punctuation">.</span><span class="token function">owns_lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//检查是否拿到了锁，和try_lock使用场景类似</span>
+				msgRecvQueue<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+			<span class="token keyword">else</span> <span class="token punctuation">{</span>
+				cout <span class="token operator">&lt;&lt;</span> <span class="token string">"没拿到锁，只能干点别的事"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+
+
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">void</span> <span class="token function">outMsgRecvQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//线程2，读取命令到消息队列</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+			<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>msgRecvQueue<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+				std<span class="token operator">::</span>unique_lock<span class="token operator">&lt;</span>std<span class="token operator">::</span>mutex<span class="token operator">&gt;</span> <span class="token function">sbguarde1</span><span class="token punctuation">(</span>my_mutex1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				std<span class="token operator">::</span>unique_lock<span class="token operator">&lt;</span>std<span class="token operator">::</span>mutex<span class="token operator">&gt;</span> <span class="token function">sbguarde2</span><span class="token punctuation">(</span>my_mutex2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//std::chrono::milliseconds dura(20000);//休息20000毫秒</span>
+				<span class="token comment">//std::this_thread::sleep_for(dura);</span>
+
+				<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>msgRecvQueue<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+					<span class="token comment">//消息不为空</span>
+					<span class="token keyword">int</span> command <span class="token operator">=</span> msgRecvQueue<span class="token punctuation">.</span><span class="token function">front</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+					msgRecvQueue<span class="token punctuation">.</span><span class="token function">pop_front</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+					<span class="token comment">//处理数据</span>
+				<span class="token punctuation">}</span>
+			<span class="token punctuation">}</span>
+			<span class="token comment">//消息为空</span>
+			cout <span class="token operator">&lt;&lt;</span> <span class="token string">"读取命令，但是消息队列是空的"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token keyword">private</span><span class="token operator">:</span>
+	std<span class="token operator">::</span>list<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> msgRecvQueue<span class="token punctuation">;</span><span class="token comment">//玩家命令</span>
+	std<span class="token operator">::</span>mutex my_mutex1<span class="token punctuation">;</span><span class="token comment">//创建一个互斥量</span>
+	std<span class="token operator">::</span>mutex my_mutex2<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h1><p>call_once(),该函数的第二个参数，是一个函数名，能够保证这个函数只被调用一次。具备互斥量的能力。配合使用once_flag，标记该函数是否已经被调用了。如果已经被调用了，就不会再被调用了</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">std<span class="token operator">::</span>mutex mymutex1<span class="token punctuation">;</span>
+std<span class="token operator">::</span>once_flag g_flag<span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">myCAS</span> <span class="token punctuation">{</span>
+
+	<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">createInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//我们需要的只被调用一次的函数</span>
+		std<span class="token operator">::</span>chrono<span class="token operator">::</span>milliseconds <span class="token function">dura</span><span class="token punctuation">(</span><span class="token number">20000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">sleep_for</span><span class="token punctuation">(</span>dura<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"createInstance()被执行了"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+		m_instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">myCAS</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+		<span class="token keyword">static</span> laJiHuiShou cl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+<span class="token keyword">private</span><span class="token operator">:</span>
+	<span class="token function">myCAS</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token comment">//把构造函数私有化了，不能轻易构造对象了</span>
+	<span class="token keyword">static</span> myCAS<span class="token operator">*</span> m_instance<span class="token punctuation">;</span><span class="token comment">//静态成员</span>
+
+
+<span class="token keyword">public</span><span class="token operator">:</span>
+	<span class="token keyword">static</span> myCAS <span class="token operator">*</span> <span class="token function">GetInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//只给第一次出现的，进行new对象操作</span>
+
+		<span class="token comment">//if (m_instance == NULL) {//双重认定</span>
+		<span class="token comment">//	if (m_instance == NULL) {</span>
+		<span class="token comment">//		std::unique_lock&lt;std::mutex&gt; sbguard(mymutex1);//如果是子线程来生成单例模式下的对象，需要进行加锁，防止</span>
+
+		<span class="token comment">//		m_instance = new myCAS();</span>
+
+		<span class="token comment">//		static laJiHuiShou cl;</span>
+		<span class="token comment">//	}</span>
+		<span class="token comment">//}</span>
+
+		<span class="token comment">//上方代码更高效</span>
+
+		std<span class="token operator">::</span><span class="token function">call_once</span><span class="token punctuation">(</span>g_flag<span class="token punctuation">,</span> createInstance<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//两个线程执行到这里，只有一个会被成功执行</span>
+
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"call_once()被执行完毕"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+		<span class="token keyword">return</span> m_instance<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">class</span> <span class="token class-name">laJiHuiShou</span> <span class="token punctuation">{</span><span class="token comment">//为了完美，垃圾主动回收一下</span>
+	<span class="token keyword">public</span><span class="token operator">:</span>
+		<span class="token operator">~</span><span class="token function">laJiHuiShou</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>myCAS<span class="token operator">::</span>m_instance<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				<span class="token keyword">delete</span> myCAS<span class="token operator">::</span>m_instance<span class="token punctuation">;</span>
+				myCAS<span class="token operator">::</span>m_instance <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">//类静态变量初始化</span>
+	myCAS <span class="token operator">*</span>myCAS<span class="token operator">::</span>m_instance <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+
+	<span class="token comment">//设计模式</span>
+	<span class="token comment">//单例设计模式：由某个或者某些特殊的类，属于这个类的对象，只能创建一个 。我就只对这一个对象进行操作</span>
+	myCAS<span class="token operator">*</span> p_a <span class="token operator">=</span> myCAS<span class="token operator">::</span><span class="token function">GetInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">//建议在主线程中生成对象之后，把所有的数据加载完之后，改成只读模式。后面对其进行独操作就不用特地上锁了</span>
+
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="条件变量condition-variable"><a href="#条件变量condition-variable" class="headerlink" title="条件变量condition_variable"></a>条件变量condition_variable</h1><h2 id="wait-，notify-one"><a href="#wait-，notify-one" class="headerlink" title="wait()，notify_one()"></a>wait()，notify_one()</h2><p>wait()：等一个东西。如果第二个参数的表达式返回的是false，解锁互斥量，开始阻塞。阻塞至其他线程调用notify_one()函数为止.唤醒之后，就会不断获取锁。获取到之后，上锁。如果wait()没有第二个参数，则默认返回false<br>notify_one()：唤醒一个在wait()的线程.假如没有线程在wait()，这个唤醒就没意义</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+	<span class="token keyword">void</span> <span class="token function">inMsgRecvQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//线程1，插入命令到消息队列</span>
+		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+			cout <span class="token operator">&lt;&lt;</span> <span class="token string">"inMsgRecvQueue执行，插入一个元素"</span> <span class="token operator">&lt;&lt;</span> i <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+			std<span class="token operator">::</span>unique_lock<span class="token operator">&lt;</span>std<span class="token operator">::</span>mutex<span class="token operator">&gt;</span> <span class="token function">sbguard1</span><span class="token punctuation">(</span>my_mutex1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+			msgRecvQueue<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+			my_conditionV<span class="token punctuation">.</span><span class="token function">notify_one</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//唤醒一个在wait的线程.假如没有线程在wait，这个唤醒就没意义</span>
+		<span class="token punctuation">}</span>
+		<span class="token keyword">return</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">void</span> <span class="token function">outMsgRecvQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//线程2，读取命令到消息队列</span>
+		<span class="token keyword">int</span> command <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+		<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			std<span class="token operator">::</span>unique_lock<span class="token operator">&lt;</span>std<span class="token operator">::</span>mutex<span class="token operator">&gt;</span> <span class="token function">sbguard1</span><span class="token punctuation">(</span>my_mutex1<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//上锁互斥量</span>
+			my_conditionV<span class="token punctuation">.</span><span class="token function">wait</span><span class="token punctuation">(</span>sbguard1<span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token keyword">this</span><span class="token punctuation">]</span> <span class="token punctuation">{</span><span class="token comment">//wait（）,等一个东西。如果第二个参数的表达式返回的是false，解锁互斥量，开始阻塞。</span>
+												 <span class="token comment">//阻塞至其他线程调用notify_one（）函数为止.唤醒之后，就会不断获取锁。获取到之后，上锁</span>
+													<span class="token comment">//如果wait（）没有第二个参数，则默认返回false</span>
+				<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>msgRecvQueue<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+					<span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+				<span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+			<span class="token comment">//这里不一定立马竞争锁成功了，可能等取命令竞争完了，插入了很多条数据了</span>
+			command <span class="token operator">=</span> msgRecvQueue<span class="token punctuation">.</span><span class="token function">front</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			msgRecvQueue<span class="token punctuation">.</span><span class="token function">pop_front</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			cout <span class="token operator">&lt;&lt;</span> <span class="token string">"outMsgRecvQueue执行，取出一个元素"</span> <span class="token operator">&lt;&lt;</span> command <span class="token operator">&lt;&lt;</span> <span class="token string">",threadID"</span><span class="token operator">&lt;&lt;</span>std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">get_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;&lt;</span>endl<span class="token punctuation">;</span>
+			sbguard1<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//因为我已经取完了，就先解锁，让写操作继续进行。线程还不够完美：我们应该把里面的命令全部取出</span>
+
+
+		<span class="token punctuation">}</span>
+
+	<span class="token punctuation">}</span>
+<span class="token keyword">private</span><span class="token operator">:</span>
+	std<span class="token operator">::</span>list<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> msgRecvQueue<span class="token punctuation">;</span><span class="token comment">//玩家命令</span>
+	std<span class="token operator">::</span>mutex my_mutex1<span class="token punctuation">;</span><span class="token comment">//创建一个互斥量</span>
+	std<span class="token operator">::</span>condition_variable my_conditionV<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+<span class="token comment">//条件变量condition_variable，wait（），notify_one（）：唤醒一个。notify_all()：唤醒全部在wait的线程</span>
+	A myobja<span class="token punctuation">;</span>
+	std<span class="token operator">::</span>thread <span class="token function">myOutMsg</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>A<span class="token operator">::</span>outMsgRecvQueue<span class="token punctuation">,</span> <span class="token operator">&amp;</span>myobja<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//myobja是引用，因为要和inMsgRecvQueue操作共用</span>
+	std<span class="token operator">::</span>thread <span class="token function">myInMsg</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>A<span class="token operator">::</span>inMsgRecvQueue<span class="token punctuation">,</span> <span class="token operator">&amp;</span>myobja<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	myInMsg<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	myOutMsg<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="async函数模板"><a href="#async函数模板" class="headerlink" title="async函数模板"></a>async函数模板</h1><h2 id="std-future-std-launch"><a href="#std-future-std-launch" class="headerlink" title="std::future,std::launch"></a>std::future,std::launch</h2><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+	<span class="token keyword">int</span> <span class="token function">mythread</span><span class="token punctuation">(</span><span class="token keyword">int</span> mypra<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程开始执行啦，threadid为"</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">get_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+		std<span class="token operator">::</span>chrono<span class="token operator">::</span>milliseconds <span class="token function">dura</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">sleep_for</span><span class="token punctuation">(</span>dura<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		cout <span class="token operator">&lt;&lt;</span> mypra <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程执行结束啦，threadid为"</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">get_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+		<span class="token keyword">return</span> <span class="token number">5</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">//std::async,std::future,std::launch(线程会延迟到)</span>
+	<span class="token comment">//希望线程返回结果</span>
+	<span class="token comment">//async是一个函数模板，启动一个异步任务：自动创建一个线程，并开始执行对应线程的入口函数</span>
+	A a<span class="token punctuation">;</span>
+	<span class="token keyword">int</span> tmppra <span class="token operator">=</span> <span class="token number">12</span><span class="token punctuation">;</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"main启动，threadid="</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span>get_id <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	std<span class="token operator">::</span>future<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> result <span class="token operator">=</span> std<span class="token operator">::</span><span class="token function">async</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>A<span class="token operator">::</span>mythread<span class="token punctuation">,</span><span class="token operator">&amp;</span>a<span class="token punctuation">,</span>tmppra<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//创建了一个线程，入口函数为mythread（这个函数必须要返回一个值，不然后面有问题）。rusult还没这么快得到值，将来会拿到。先不管了，程序往下运行</span>
+	<span class="token comment">//std::future&lt;int&gt; result = std::async(std::launch::deferred,&amp;A::mythread,&amp;a,tmppra);//deferred延迟调用，遇到get和wait使用之后再会开始调用</span>
+	<span class="token comment">//std::future&lt;int&gt; result = std::async(std::launch::async, &amp;A::mythread, &amp;a, tmppra);//立即开始执行，不会特地等get和wait的使用</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"continue……！"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token keyword">int</span> def <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	cout <span class="token operator">&lt;&lt;</span> result<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span><span class="token comment">//会一直卡在这里，直到result拿到了值，才会继续进行。get（）只能调用一次</span>
+
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"i love china!"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	<span class="token comment">//补充</span>
+	<span class="token comment">//std::async:创建异步任务</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"main"</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span>get_id <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	std<span class="token operator">::</span>future<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> result <span class="token operator">=</span> std<span class="token operator">::</span><span class="token function">async</span><span class="token punctuation">(</span>mythread<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//参数deferred【延迟调用,不创建新线程，只在当前线程下进行任务】，async【强制创建任务】，std::async和std::thread的区别</span>
+												   <span class="token comment">//可能有时async不会创建新的线程。且返回值方便传递出去</span>
+												   <span class="token comment">//使用“或”符号，说明就是两个启动方式都有可能发生，随机二选一</span>
+												   <span class="token comment">//不使用参数，就两个启动方式都有可能发生，随机二选一</span>
+												   <span class="token comment">//如果有时资源紧张，thread操作可能会报异常</span>
+
+	<span class="token comment">//系统如何决定是async还是deferred</span>
+	std<span class="token operator">::</span>future_status status <span class="token operator">=</span> result<span class="token punctuation">.</span><span class="token function">wait_for</span><span class="token punctuation">(</span>std<span class="token operator">::</span>chrono<span class="token operator">::</span><span class="token function">seconds</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//系统停在这里等待一秒钟.status保存result的状态：timeout，ready,deferred</span>
+																		 <span class="token comment">//也可以写成std::future_status status = result.wait_for(0s);</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>status <span class="token operator">==</span> std<span class="token operator">::</span>future_status<span class="token operator">::</span>deferred<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//如果asnyc的第一个参数被设置为std::launch::deferred，本条件成立</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程延迟执行！"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+		cout <span class="token operator">&lt;&lt;</span> result<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>status <span class="token operator">==</span> std<span class="token operator">::</span>future_status<span class="token operator">::</span>ready<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//执行完了</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程执行完了！"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+		cout <span class="token operator">&lt;&lt;</span> result<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>status <span class="token operator">==</span> std<span class="token operator">::</span>future_status<span class="token operator">::</span>timeout<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//超时</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"超时了，线程还没有执行完！"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	cout <span class="token operator">&lt;&lt;</span> result<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="packaged-task"><a href="#packaged-task" class="headerlink" title="packaged_task"></a>packaged_task</h1><p>packaged_task的使用：把函数包装起来,实现更多接口。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">	vector<span class="token operator">&lt;</span> std<span class="token operator">::</span>packaged_task<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token operator">&gt;&gt;</span> myTask<span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">mythread</span><span class="token punctuation">(</span><span class="token keyword">int</span> mypra<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程开始执行啦，threadid为"</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">get_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	std<span class="token operator">::</span>chrono<span class="token operator">::</span>milliseconds <span class="token function">dura</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">sleep_for</span><span class="token punctuation">(</span>dura<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	cout <span class="token operator">&lt;&lt;</span> mypra <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程执行结束啦，threadid为"</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">get_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token keyword">return</span> <span class="token number">5</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">//packaged_task的使用：把函数包装起来,实现更多接口</span>
+		<span class="token comment">//写法1</span>
+		<span class="token comment">//std::pakage_task</span>
+		<span class="token comment">//cout &lt;&lt; "main启动，threadid=" &lt;&lt; std::this_thread::get_id &lt;&lt; endl;</span>
+		<span class="token comment">//std::packaged_task&lt;int(int)&gt; mypt(mythread);//把mythread函数包装了起来,实现更多接口</span>
+		<span class="token comment">//std::thread t1(std::ref(mypt), 1);//1 是入口函数的参数</span>
+		<span class="token comment">//t1.join();</span>
+		<span class="token comment">//std::future&lt;int&gt; result = mypt.get_future();</span>
+		<span class="token comment">//cout &lt;&lt; result.get() &lt;&lt; endl;</span>
+
+		<span class="token comment">//写法2：</span>
+		std<span class="token operator">::</span>packaged_task<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token operator">&gt;</span> <span class="token function">mypt</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token keyword">int</span> mypar<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程开始执行啦，threadid为"</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">get_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+			std<span class="token operator">::</span>chrono<span class="token operator">::</span>milliseconds <span class="token function">dura</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">sleep_for</span><span class="token punctuation">(</span>dura<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			cout <span class="token operator">&lt;&lt;</span> mypar <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+			cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程执行结束啦，threadid为"</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">get_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+			<span class="token keyword">return</span> <span class="token number">5</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+		myTask<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>std<span class="token operator">::</span><span class="token function">move</span><span class="token punctuation">(</span>mypt<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+		std<span class="token operator">::</span>packaged_task<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token operator">&gt;</span> myptr2<span class="token punctuation">;</span>
+		<span class="token keyword">auto</span> iter <span class="token operator">=</span> myTask<span class="token punctuation">.</span><span class="token function">begin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		myptr2 <span class="token operator">=</span> std<span class="token operator">::</span><span class="token function">move</span><span class="token punctuation">(</span><span class="token operator">*</span>iter<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//vector里面的第一个对象就复制到myptr2了</span>
+		myTask<span class="token punctuation">.</span><span class="token function">erase</span><span class="token punctuation">(</span>iter<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//删除vector第一个元素，iter也没用了</span>
+		std<span class="token operator">::</span>thread <span class="token function">t1</span><span class="token punctuation">(</span>std<span class="token operator">::</span><span class="token function">ref</span><span class="token punctuation">(</span>myptr2<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//1 是入口函数的参数</span>
+		t1<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		std<span class="token operator">::</span>future<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> result <span class="token operator">=</span> myptr2<span class="token punctuation">.</span><span class="token function">get_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		cout <span class="token operator">&lt;&lt;</span> result<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+		<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="线程之间值的传递"><a href="#线程之间值的传递" class="headerlink" title="线程之间值的传递"></a>线程之间值的传递</h1><h2 id="std-promise"><a href="#std-promise" class="headerlink" title="std::promise"></a>std::promise</h2><p>promise的对象用于线程之间传递数值。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">mythread</span><span class="token punctuation">(</span>std<span class="token operator">::</span>promise<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> <span class="token operator">&amp;</span>tmp<span class="token punctuation">,</span><span class="token keyword">int</span> cal<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">//</span>
+	cal<span class="token operator">++</span><span class="token punctuation">;</span>
+	cal <span class="token operator">*=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+	std<span class="token operator">::</span>chrono<span class="token operator">::</span>milliseconds <span class="token function">dura</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">sleep_for</span><span class="token punctuation">(</span>dura<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token keyword">int</span> result <span class="token operator">=</span> cal<span class="token punctuation">;</span>
+
+	tmp<span class="token punctuation">.</span><span class="token function">set_value</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//结果保存到了tmp中</span>
+
+	<span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+	<span class="token keyword">void</span> <span class="token function">mythread2</span><span class="token punctuation">(</span>std<span class="token operator">::</span>future<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span><span class="token operator">&amp;</span> tmp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">auto</span> result <span class="token operator">=</span> tmp<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"mythread2得到值"</span> <span class="token operator">&lt;&lt;</span> result <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">//std::promise的作用：线程之间值传递</span>
+	std<span class="token operator">::</span>promise<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> myprom<span class="token punctuation">;</span>
+	std<span class="token operator">::</span>thread <span class="token function">t1</span><span class="token punctuation">(</span>mythread<span class="token punctuation">,</span> std<span class="token operator">::</span><span class="token function">ref</span><span class="token punctuation">(</span>myprom<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">180</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//用myprom去获得得到的值。</span>
+	t1<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	std<span class="token operator">::</span>future<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> fut <span class="token operator">=</span> myprom<span class="token punctuation">.</span><span class="token function">get_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//fut即将得到myprom的值</span>
+	<span class="token comment">//auto result = fut.get();//get只能调用一次</span>
+	<span class="token comment">//cout &lt;&lt; "result=" &lt;&lt; result &lt;&lt; endl;</span>
+
+	std<span class="token operator">::</span>thread <span class="token function">t2</span><span class="token punctuation">(</span>mythread2<span class="token punctuation">,</span> std<span class="token operator">::</span><span class="token function">ref</span><span class="token punctuation">(</span>fut<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	t2<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="std-future"><a href="#std-future" class="headerlink" title="std::future"></a>std::future</h2><p>future的对象会在将来得到一个值。future的其他成员函数：枚举类型future_status，记录状态。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><div class="caption"><span>future_status</span></div><code class="language-cpp"><span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+	<span class="token keyword">int</span> <span class="token function">mythread</span><span class="token punctuation">(</span><span class="token keyword">int</span> mypra<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程开始执行啦，threadid为"</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">get_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+		std<span class="token operator">::</span>chrono<span class="token operator">::</span>milliseconds <span class="token function">dura</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">sleep_for</span><span class="token punctuation">(</span>dura<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		cout <span class="token operator">&lt;&lt;</span> mypra <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程执行结束啦，threadid为"</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">get_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+		<span class="token keyword">return</span> <span class="token number">5</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">//future的其他成员函数：枚举类型future_status</span>
+	<span class="token comment">//async是一个函数模板，启动一个异步任务：自动创建一个线程，并开始执行对应线程的入口函数</span>
+	A a<span class="token punctuation">;</span>
+	<span class="token keyword">int</span> tmppra <span class="token operator">=</span> <span class="token number">12</span><span class="token punctuation">;</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"main启动，threadid="</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span>get_id <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	std<span class="token operator">::</span>future<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> result <span class="token operator">=</span> std<span class="token operator">::</span><span class="token function">async</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>A<span class="token operator">::</span>mythread<span class="token punctuation">,</span> <span class="token operator">&amp;</span>a<span class="token punctuation">,</span> tmppra<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//创建了一个线程，入口函数为mythread（这个函数必须要返回一个值，不然后面有问题）。rusult还没这么快得到值，将来会拿到。先不管了，程序往下运行</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"continue……！"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	
+	std<span class="token operator">::</span>future_status status <span class="token operator">=</span> result<span class="token punctuation">.</span><span class="token function">wait_for</span><span class="token punctuation">(</span>std<span class="token operator">::</span>chrono<span class="token operator">::</span><span class="token function">seconds</span><span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//系统停在这里等待一秒钟.status保存result的状态：timeout，ready,deferred</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>status <span class="token operator">==</span> std<span class="token operator">::</span>future_status<span class="token operator">::</span>timeout<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//超时</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"超时了，线程还没有执行完！"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>status <span class="token operator">==</span> std<span class="token operator">::</span>future_status<span class="token operator">::</span>ready<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//执行完了</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程执行完了！"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+		cout <span class="token operator">&lt;&lt;</span> result<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>status <span class="token operator">==</span> std<span class="token operator">::</span>future_status<span class="token operator">::</span>deferred<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//如果asnyc的第一个参数被设置为std::launch::deferred，本条件成立</span>
+		cout <span class="token operator">&lt;&lt;</span> <span class="token string">"线程延迟执行！"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+		cout <span class="token operator">&lt;&lt;</span> result<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"i love china"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>future的对象get只能用一次，假如我多个线程想要获取某个结果，怎么办。这时shared_future就派上用场了。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">mythread</span><span class="token punctuation">(</span>std<span class="token operator">::</span>promise<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span><span class="token operator">&amp;</span> tmp<span class="token punctuation">,</span> <span class="token keyword">int</span> cal<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">//</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"mythread1开始执行，id："</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span>get_id <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	cal <span class="token operator">*=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+	std<span class="token operator">::</span>chrono<span class="token operator">::</span>milliseconds <span class="token function">dura</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	std<span class="token operator">::</span>this_thread<span class="token operator">::</span><span class="token function">sleep_for</span><span class="token punctuation">(</span>dura<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token keyword">int</span> result <span class="token operator">=</span> cal<span class="token punctuation">;</span>
+
+	tmp<span class="token punctuation">.</span><span class="token function">set_value</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//结果保存到了tmp中</span>
+
+	<span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">void</span> <span class="token function">mythread2</span><span class="token punctuation">(</span>std<span class="token operator">::</span>shared_future<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span><span class="token operator">&amp;</span> tmp<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"mythread2开始执行，id："</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>this_thread<span class="token operator">::</span>get_id <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token keyword">auto</span> result <span class="token operator">=</span> tmp<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"mythread2得到值"</span> <span class="token operator">&lt;&lt;</span> result <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+	<span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	<span class="token comment">//future的其他成员函数：shared_future。get只能用一次，假如我多个线程想要获取某个结果，怎么办。</span>
+	std<span class="token operator">::</span>promise<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> myprom<span class="token punctuation">;</span>
+	std<span class="token operator">::</span>thread <span class="token function">t1</span><span class="token punctuation">(</span>mythread<span class="token punctuation">,</span> std<span class="token operator">::</span><span class="token function">ref</span><span class="token punctuation">(</span>myprom<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">180</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//用myprom去获得得到的值。</span>
+	t1<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token comment">//std::future&lt;int&gt; fut = myprom.get_future();//fut即将得到myprom的值</span>
+	<span class="token comment">//auto result = fut.get();//future类型的对象的get（）只能调用一次!!!!!!!!!!!get()函数的设计，是一个移动语义。所以移动完，fut已经空了</span>
+	<span class="token comment">//cout &lt;&lt; "result=" &lt;&lt; result &lt;&lt; endl;</span>
+	<span class="token comment">//std::shared_future&lt;int&gt; fut_s(std::move(fut));//或者std::shared_future&lt;int&gt; fut_s(fut.share())</span>
+
+	std<span class="token operator">::</span>shared_future<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> <span class="token function">fut_s</span><span class="token punctuation">(</span>myprom<span class="token punctuation">.</span><span class="token function">get_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">auto</span> tmpFut <span class="token operator">=</span> fut_s<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//此时的fut_s就是可以多次被调用get（）函数</span>
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"fut_s第一次get（），值为："</span> <span class="token operator">&lt;&lt;</span>tmpFut<span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+	std<span class="token operator">::</span>thread <span class="token function">t2</span><span class="token punctuation">(</span>mythread2<span class="token punctuation">,</span> std<span class="token operator">::</span><span class="token function">ref</span><span class="token punctuation">(</span>fut_s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	t2<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"i love china"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="原子操作-atomic"><a href="#原子操作-atomic" class="headerlink" title="原子操作 atomic"></a>原子操作 atomic</h1><p>多个线程对一个变量进行读写操作，不加锁肯定会出现冲突错误。所以，引入原子操作：不会被打断的程序执行片段。就可以不用加锁了，但是只能针对一个变量的进行原子操作。<br>针对++，–，+=，&amp;=，等操作支持，a=a+1不支持。一般用于计数统计。</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp">std<span class="token operator">::</span>atomic<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> g_mycout <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span><span class="token comment">//封装了一个类型为int的原子对象</span>
+<span class="token comment">//std::mutex g_mutex;</span>
+
+<span class="token keyword">void</span> <span class="token function">mythread</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10000000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token comment">//g_mutex.lock();</span>
+		g_mycout<span class="token operator">++</span><span class="token punctuation">;</span><span class="token comment">//此时它是原子操作，不会被打断了</span>
+		<span class="token comment">//g_mutex.unlock();</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	std<span class="token operator">::</span>thread <span class="token function">mytobj1</span><span class="token punctuation">(</span>mythread<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	std<span class="token operator">::</span>thread <span class="token function">mytobj2</span><span class="token punctuation">(</span>mythread<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	mytobj1<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	mytobj2<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	cout <span class="token operator">&lt;&lt;</span> g_mycout <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+
+	cout <span class="token operator">&lt;&lt;</span> <span class="token string">"执行完毕"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="windows临界区以及特殊的互斥量mutex"><a href="#windows临界区以及特殊的互斥量mutex" class="headerlink" title="windows临界区以及特殊的互斥量mutex"></a>windows临界区以及特殊的互斥量mutex</h1><p>windows临界区，类似于c++11的mutes，相同的线程里面对于相同的临界区变量，可以允许多次加锁，但是也相应地调用一样多次的解锁，用类的构造函数和析构函数来实现临界区的自动进入和自动退出。<br>相类似的，递归的独占互斥量recursive_mutex。允许一个互斥量多次lock<br>带超时的互斥量timed_mutex和recursive_timed_mutex。超时了就不等了。接口：try_lock_for(时长)返回true就是获取了锁。try_lock_until(时间点)</p>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">__WINDOWSJQ_</span></span>
+
+<span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span><span class="token operator">:</span>
+	<span class="token function">A</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">__WINDOWSJQ_</span></span>
+		<span class="token function">InitializeCriticalSection</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>my_winsec<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span> <span class="token comment">// __WINDOWSJQ_</span></span>
+
+	<span class="token punctuation">}</span>
+	<span class="token keyword">void</span> <span class="token function">inMsgRecvQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//线程1，插入命令到消息队列</span>
+		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			cout <span class="token operator">&lt;&lt;</span> <span class="token string">"插入命令："</span> <span class="token operator">&lt;&lt;</span> i <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">__WINDOWSJQ_</span></span>
+			<span class="token function">EnterCriticalSection</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>my_winsec<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			msgRecvQueue<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token function">LeaveCriticalSection</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>my_winsec<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">else</span></span>
+			std<span class="token operator">::</span><span class="token function">lock</span><span class="token punctuation">(</span>my_mutex1<span class="token punctuation">,</span> my_mutex2<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//相当于每一个互斥量执行lock操作，</span>
+			std<span class="token operator">::</span>lock_guard<span class="token operator">&lt;</span>mutex<span class="token operator">&gt;</span> <span class="token function">sbgurad1</span><span class="token punctuation">(</span>my_mutex1<span class="token punctuation">,</span> std<span class="token operator">::</span>adopt_lock<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//智能lock,构造时会自动执行lock函数。但是前面已经执行了lock操作，需要添加std::adopt_lock参数来避免问题</span>
+			std<span class="token operator">::</span>lock_guard<span class="token operator">&lt;</span>mutex<span class="token operator">&gt;</span> <span class="token function">sbgurad2</span><span class="token punctuation">(</span>my_mutex2<span class="token punctuation">,</span> std<span class="token operator">::</span>adopt_lock<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//智能lock,构造时会自动执行lock函数。但是前面已经执行了lock操作，需要添加std::adopt_lock参数来避免问题</span>
+			msgRecvQueue<span class="token punctuation">.</span><span class="token function">push_back</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span> <span class="token comment">// __WINDOWSJQ_</span></span>
+
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">void</span> <span class="token function">outMsgRecvQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token comment">//线程2，读取命令到消息队列</span>
+		<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">__WINDOWSJQ_</span></span>
+			<span class="token function">EnterCriticalSection</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>my_winsec<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>msgRecvQueue<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				<span class="token comment">//消息不为空</span>
+				<span class="token keyword">int</span> command <span class="token operator">=</span> msgRecvQueue<span class="token punctuation">.</span><span class="token function">front</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				msgRecvQueue<span class="token punctuation">.</span><span class="token function">pop_front</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//处理数据</span>
+				<span class="token function">LeaveCriticalSection</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>my_winsec<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+			<span class="token keyword">else</span> <span class="token punctuation">{</span>
+				<span class="token comment">//消息为空</span>
+				cout <span class="token operator">&lt;&lt;</span> <span class="token string">"读取命令，但是消息队列是空的"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+				<span class="token function">LeaveCriticalSection</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>my_winsec<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">else</span> <span class="token comment">// DEBUG</span></span>
+
+			my_mutex1<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//上锁</span>
+			my_mutex2<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//上锁</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>msgRecvQueue<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				<span class="token comment">//消息不为空</span>
+				<span class="token keyword">int</span> command <span class="token operator">=</span> msgRecvQueue<span class="token punctuation">.</span><span class="token function">front</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				msgRecvQueue<span class="token punctuation">.</span><span class="token function">pop_front</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//处理数据</span>
+				my_mutex1<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				my_mutex2<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+			<span class="token keyword">else</span> <span class="token punctuation">{</span>
+				<span class="token comment">//消息为空</span>
+				cout <span class="token operator">&lt;&lt;</span> <span class="token string">"读取命令，但是消息队列是空的"</span> <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+				my_mutex1<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//因为有两个出口，所以每个出口都要写上unlock</span>
+				my_mutex2<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+			<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span></span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+<span class="token keyword">private</span><span class="token operator">:</span>
+	std<span class="token operator">::</span>list<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">&gt;</span> msgRecvQueue<span class="token punctuation">;</span><span class="token comment">//玩家命令</span>
+	std<span class="token operator">::</span>mutex my_mutex1<span class="token punctuation">;</span><span class="token comment">//创建一个互斥量</span>
+	std<span class="token operator">::</span>mutex my_mutex2<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">ifdef</span> <span class="token expression">__WINDOWSJQ_</span></span>
+	CRITICAL_SECTION my_winsec<span class="token punctuation">;</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">endif</span> <span class="token comment">// 临界区__WINDOWSJQ_</span></span>
+
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+	A myobj<span class="token punctuation">;</span>
+
+	std<span class="token operator">::</span>thread <span class="token function">mythread</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>A<span class="token operator">::</span>outMsgRecvQueue<span class="token punctuation">,</span> <span class="token operator">&amp;</span>myobj<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//第二个参数是引用，这样才能保证操作的是同一个对象</span>
+	std<span class="token operator">::</span>thread <span class="token function">mythread2</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>A<span class="token operator">::</span>inMsgRecvQueue<span class="token punctuation">,</span> <span class="token operator">&amp;</span>myobj<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//第二个参数是引用，这样才能保证操作的是同一个对象</span>
+
+	mythread<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	mythread2<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h1 id="拓展知识"><a href="#拓展知识" class="headerlink" title="拓展知识"></a>拓展知识</h1><p>原子操作：读load（），写store（）<br>线程池：把一堆线程放到一起，统一管理，循环利用，用完放回去。场景假设：服务器为客户端提供服务，来一个客户端，服务器就为它创建一个新的线程。但是如果客户端特别多……创建线程很有可能创建失败了，后面就崩溃了。实现方法：程序启动时，一次性建好一定数量的线程<br>线程数量极限：2000个<br>数量建议：使用接口有指定数量，就严格按照数量来</p>
+
                 
             </div>
             <hr/>
@@ -568,7 +1263,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/C-IT-Skills/">
+                                    <span class="chip bg-color">C++,IT,Skills</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -627,7 +1326,7 @@
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            Notes when learning multithreading
                         
                     </div>
                     <div class="publish-info">
@@ -636,13 +1335,25 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Change Kuan
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Skills/" class="post-category">
+                                    Skills
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/C-IT-Skills/">
+                        <span class="chip bg-color">C++,IT,Skills</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -835,7 +1546,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">302</span>&nbsp;字
+                class="white-color">6.7k</span>&nbsp;字
             
             
             

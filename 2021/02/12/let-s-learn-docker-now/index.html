@@ -558,7 +558,7 @@ docker version
 <span class="token comment">#测试hello world   </span>
 docker run hello-world<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>看到如下画面，说明Docker安装成功<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/yrVJ5F"><img src="https://s3.ax1x.com/2021/02/12/yrVJ5F.png" alt="启动Docker运行结果"></a></p>
-<h2 id="阿里云镜像加速"><a href="#阿里云镜像加速" class="headerlink" title="阿里云镜像加速"></a>阿里云镜像加速</h2><p>登录阿里云，找到容器镜像服务，镜像加速器，里面有详细方法，粘贴提供的命令到服务器即可。<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/ys2NdJ"><img src="https://s3.ax1x.com/2021/02/14/ys2NdJ.png" alt="ys2NdJ.png"></a></p>
+<h2 id="阿里云镜像加速"><a href="#阿里云镜像加速" class="headerlink" title="阿里云镜像加速"></a>阿里云镜像加速</h2><p>登录阿里云，找到容器镜像服务，镜像加速器，里面有详细方法，粘贴提供的命令到服务器即可。<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/ys2NdJ"><img src="https://s3.ax1x.com/2021/02/14/ys2NdJ.png" alt="阿里云镜像加速网页操作.png"></a></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mkdir</span> -p /etc/docker
 <span class="token function">sudo</span> <span class="token function">tee</span> /etc/docker/daemon.json <span class="token operator">&lt;&lt;-</span><span class="token string">'EOF'
 {
@@ -567,8 +567,8 @@ docker run hello-world<span aria-hidden="true" class="line-numbers-rows"><span><
 EOF</span>
 <span class="token function">sudo</span> systemctl daemon-reload
 <span class="token function">sudo</span> systemctl restart docker<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h1 id="Docker运行过程"><a href="#Docker运行过程" class="headerlink" title="Docker运行过程"></a>Docker运行过程</h1><p><a target="_blank" rel="noopener" href="https://imgchr.com/i/ys4xqf"><img src="https://s3.ax1x.com/2021/02/14/ys4xqf.jpg" alt="ys4xqf.jpg"></a></p>
-<h1 id="Docker原理"><a href="#Docker原理" class="headerlink" title="Docker原理"></a>Docker原理</h1><p>Docker是一个client-server结构的系统，Docker的守护进程运行在主机上，通过websocket从客户端进行访问。<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/ys55Ss"><img src="https://s3.ax1x.com/2021/02/14/ys55Ss.jpg" alt="ys55Ss.jpg"></a></p>
+<h1 id="Docker运行过程"><a href="#Docker运行过程" class="headerlink" title="Docker运行过程"></a>Docker运行过程</h1><p><a target="_blank" rel="noopener" href="https://imgchr.com/i/ys4xqf"><img src="https://s3.ax1x.com/2021/02/14/ys4xqf.jpg" alt="Docker运行流程.jpg"></a></p>
+<h1 id="Docker原理"><a href="#Docker原理" class="headerlink" title="Docker原理"></a>Docker原理</h1><p>Docker是一个client-server结构的系统，Docker的守护进程运行在主机上，通过websocket从客户端进行访问。<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/ys55Ss"><img src="https://s3.ax1x.com/2021/02/14/ys55Ss.jpg" alt="Docker组件关系原理.jpg"></a></p>
 
                 
             </div>

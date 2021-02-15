@@ -476,14 +476,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-02-14
+                    2021-02-15
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    383
+                    453
                 </div>
                 
 
@@ -567,8 +567,11 @@ docker run hello-world<span aria-hidden="true" class="line-numbers-rows"><span><
 EOF</span>
 <span class="token function">sudo</span> systemctl daemon-reload
 <span class="token function">sudo</span> systemctl restart docker<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h1 id="Docker运行过程"><a href="#Docker运行过程" class="headerlink" title="Docker运行过程"></a>Docker运行过程</h1><p><a target="_blank" rel="noopener" href="https://imgchr.com/i/ys4xqf"><img src="https://s3.ax1x.com/2021/02/14/ys4xqf.jpg" alt="Docker运行流程.jpg"></a></p>
-<h1 id="Docker原理"><a href="#Docker原理" class="headerlink" title="Docker原理"></a>Docker原理</h1><p>Docker是一个client-server结构的系统，Docker的守护进程运行在主机上，通过websocket从客户端进行访问。<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/ys55Ss"><img src="https://s3.ax1x.com/2021/02/14/ys55Ss.jpg" alt="Docker组件关系原理.jpg"></a></p>
+
+
+<h1 id="Docker原理"><a href="#Docker原理" class="headerlink" title="Docker原理"></a>Docker原理</h1><h2 id="Docker运行过程"><a href="#Docker运行过程" class="headerlink" title="Docker运行过程"></a>Docker运行过程</h2><p><a target="_blank" rel="noopener" href="https://imgchr.com/i/ys4xqf"><img src="https://s3.ax1x.com/2021/02/14/ys4xqf.jpg" alt="Docker运行流程.jpg"></a></p>
+<h2 id="Docker组件原理"><a href="#Docker组件原理" class="headerlink" title="Docker组件原理"></a>Docker组件原理</h2><p>Docker是一个client-server结构的系统，Docker的守护进程运行在主机上，通过websocket从客户端进行访问。<br>Docker-server接收Docker-client的指令<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/ys55Ss"><img src="https://s3.ax1x.com/2021/02/14/ys55Ss.jpg" alt="Docker组件关系原理.jpg"></a></p>
+<h2 id="为什么Docker比VM快"><a href="#为什么Docker比VM快" class="headerlink" title="为什么Docker比VM快"></a>为什么Docker比VM快</h2><p>1、Docker有比虚拟机更少的抽象层<br>2、Docker使用的是宿主机的内核，虚拟机需要的Guest OS。新建容器的时候，Docker不需要重新加载一个操作系统<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/yyX0oR"><img src="https://s3.ax1x.com/2021/02/15/yyX0oR.jpg" alt="虚拟机与Docker内核架构对比图.jpg"></a></p>
 
                 
             </div>

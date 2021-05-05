@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Let&#39;s Learn Git Now!, CS">
+    <meta name="keywords" content="Talking about C++ Memory Management, CS">
     <meta name="description" content="Just do IT">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -27,7 +27,7 @@
 </script>
 
 
-    <title>Let&#39;s Learn Git Now! | Kuan 酷站</title>
+    <title>Talking about C++ Memory Management | Kuan 酷站</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -323,12 +323,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Let&#39;s Learn Git Now!</h1>
+                    <h1 class="description center-align post-title">Talking about C++ Memory Management</h1>
                 </div>
             </div>
         </div>
@@ -444,8 +444,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Git-IT-Skills/">
-                                <span class="chip bg-color">Git,IT,Skills</span>
+                            <a href="/tags/C-IT-Skills/">
+                                <span class="chip bg-color">C++,IT,Skills</span>
                             </a>
                         
                     </div>
@@ -483,14 +483,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    365
+                    650
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    2 分
                 </div>
                 
 
@@ -518,15 +518,24 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Git基础知识"><a href="#Git基础知识" class="headerlink" title="Git基础知识"></a>Git基础知识</h1><h2 id="工作区域"><a href="#工作区域" class="headerlink" title="工作区域"></a>工作区域</h2><p>本地项目目录通过 <strong>git add file</strong> 将项目提交到 <strong>暂存区</strong>，暂存区通过 <strong>git commit</strong> 将项目提交到 <strong>本地仓库</strong>，本地仓库通过 <strong>git push</strong> 将项目提交到远程仓库。<br>通过 <strong>git pull</strong> 将项目仓远程仓库拉取到 <strong>本地仓库</strong> ， 通过 <strong>git reset</strong> 将代码从本地仓库回滚到<strong>暂存区</strong> ，通过 <strong>git checkout</strong> 将代码从暂存区回退到 <strong>工作目录</strong><br><a target="_blank" rel="noopener" href="https://imgtu.com/i/gKSXlj"><img src="https://z3.ax1x.com/2021/05/05/gKSXlj.png" alt="工作区域示意图"></a></p>
-<h2 id="忽略提交"><a href="#忽略提交" class="headerlink" title="忽略提交"></a>忽略提交</h2><p>在根目录下建立 <strong>.gitignore</strong> 文件</p>
-<h3 id="基本示例"><a href="#基本示例" class="headerlink" title="基本示例"></a>基本示例</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#为注释</span>
-*.txt	<span class="token comment">#忽略所有以 .txt 结尾的文件</span>
-<span class="token operator">!</span>lib.txt	<span class="token comment">#但是lib.txt除外</span>
-/temp	<span class="token comment">#仅仅忽略根目录下的temp，子目录不忽略</span>
-build/	<span class="token comment">#忽略build/目录下的所有文件，包括子目录</span>
-doc/*.txt	<span class="token comment">#忽略当前目录下的 .txt结尾的文件，但是子目录里面的不包括</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>1、该配置文件的空行和井号都会被忽略<br>2、可以使用通配符如：* 表示多个字符 ，？表示一个字符， 方括号表示字符可选范围， 大括号表示可选字符串<br>3、如果名称的前面是一个感叹号，说明除此之外<br>4、如果名称的最前面是一个分隔符，表示要忽略的文件在次目录下，不过子目录不包括<br>5、名称的后面有一个分隔符，表示忽略此目录下该名称的子目录</p>
+                <h1 id="内存对齐"><a href="#内存对齐" class="headerlink" title="内存对齐"></a>内存对齐</h1><h2 id="对齐设置"><a href="#对齐设置" class="headerlink" title="对齐设置"></a>对齐设置</h2><p>每个平台的编译器都有自己默认的对齐系数。gcc中默认#pregma pack(4)，也可以通过与编译命令自己修改<br><strong>有效对齐值</strong>：定值 <strong>#pragma pack(n)</strong> 和 <strong>结构体中最长数据类型</strong> 长度中较小的那个。有效对齐值也叫对齐单位</p>
+<h2 id="三大原则"><a href="#三大原则" class="headerlink" title="三大原则"></a>三大原则</h2><p>1、变量的起始位置可以被其对齐值整除。<br>2、结构体里面的成员相对与起始位置的偏移量，可以被该成员大小与有效对齐值中较小那个整除。如果不行，就在前面一个成员的后面补充字节。<br>3、结构体总大小可以被有效对齐值整除。如果不行，则在后面补充字节。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>1、减少使用的内存<br>2、提升数据读取的效率</p>
+<h2 id="举例说明"><a href="#举例说明" class="headerlink" title="举例说明"></a>举例说明</h2><pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">struct Test{
+	char a;
+	int b;
+	short c;
+};<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>char的对齐值是1，int 的对齐值是4， short的对齐值是2，整个结构体的对齐值是4。对齐值可以用alignof获取得到。<br>假设结构体变量的起始地址已经对齐，第一个成员后面需要补充3个字节后第二成员才可以对齐。第三个成员后面需要补充2两个字节后才能满足原则三。所以这个结构体的总大小为12字节。<br>当我们改变结构体成员的顺序后</p>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">struct Test{
+	int b;
+	short c;
+	char a;
+};<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>此时结构体的总大小为8。由此可以看出，适当安排成员的顺序可以减少内存的使用。</p>
+<h1 id="操作系统和内存管理机制"><a href="#操作系统和内存管理机制" class="headerlink" title="操作系统和内存管理机制"></a>操作系统和内存管理机制</h1><h2 id="windows内存管理机制"><a href="#windows内存管理机制" class="headerlink" title="windows内存管理机制"></a>windows内存管理机制</h2><p>操作系统将Physical Memory映射为连续的Virtual Memory，并提供相关api来对vm进行管理，在virtual Memory api 之上又构建了Heap Memory API。<strong>C的内存管理机制就是构建在Heap Memory api之上的。</strong><br>使用Virtual Alloc分配内存时，每次只能分配页面大小(默认4KB)整数倍的连续虚拟内存(但是两次连续调用所分配的内存并不一定连续)。</p>
+<h2 id="linux内存管理机制"><a href="#linux内存管理机制" class="headerlink" title="linux内存管理机制"></a>linux内存管理机制</h2><p>linux中可以使用brk或者mmap函数从用户空间中申请连续内存<br>通过调用brk(0)可以获取指向用户空间某一地址的指针，随后调用brk(len)可以在原指针地址的基础上移动该指针以达到申请或释放内存的目的。而mmap则是直接在用户空间中申请一块连续的空闲内存。</p>
+<h2 id="C内存管理机制"><a href="#C内存管理机制" class="headerlink" title="C内存管理机制"></a>C内存管理机制</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gKZtzV"><img src="https://z3.ax1x.com/2021/05/05/gKZtzV.png" alt="c内存布局"></a></p>
 
                 
             </div>
@@ -553,7 +562,7 @@ doc/*.txt	<span class="token comment">#忽略当前目录下的 .txt结尾的文
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://atekuankz.icu/2021/05/05/let-s-learn-git-now/">http://atekuankz.icu/2021/05/05/let-s-learn-git-now/</a>
+                    <a href="http://atekuankz.icu/2021/05/05/talking-about-c-memory-management/">http://atekuankz.icu/2021/05/05/talking-about-c-memory-management/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -591,8 +600,8 @@ doc/*.txt	<span class="token comment">#忽略当前目录下的 .txt结尾的文
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Git-IT-Skills/">
-                                    <span class="chip bg-color">Git,IT,Skills</span>
+                                <a href="/tags/C-IT-Skills/">
+                                    <span class="chip bg-color">C++,IT,Skills</span>
                                 </a>
                             
                         </div>
@@ -636,9 +645,10 @@ doc/*.txt	<span class="token comment">#忽略当前目录下的 .txt结尾的文
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/05/05/talking-about-c-memory-management/">
                     <div class="card-image">
@@ -656,9 +666,9 @@ doc/*.txt	<span class="token comment">#忽略当前目录下的 .txt结尾的文
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-05
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-05
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -671,6 +681,7 @@ doc/*.txt	<span class="token comment">#忽略当前目录下的 .txt结尾的文
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -689,24 +700,24 @@ doc/*.txt	<span class="token comment">#忽略当前目录下的 .txt结尾的文
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/02/28/let-s-learn-golang-now/">
+                <a href="/2021/05/05/let-s-learn-git-now/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Let&#39;s Learn GoLang Now!">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Let&#39;s Learn Git Now!">
                         
-                        <span class="card-title">Let&#39;s Learn GoLang Now!</span>
+                        <span class="card-title">Let&#39;s Learn Git Now!</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Notes when learning Golang
+                            Notes when learning Git
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-28
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-05
                             </span>
                         <span class="publish-author">
                             
@@ -723,8 +734,8 @@ doc/*.txt	<span class="token comment">#忽略当前目录下的 .txt结尾的文
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/GoLang-IT-Skills/">
-                        <span class="chip bg-color">GoLang,IT,Skills</span>
+                    <a href="/tags/Git-IT-Skills/">
+                        <span class="chip bg-color">Git,IT,Skills</span>
                     </a>
                     
                 </div>

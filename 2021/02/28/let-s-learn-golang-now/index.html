@@ -476,21 +476,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-02-28
+                    2021-05-05
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    544
+                    629
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    2 分
                 </div>
                 
 
@@ -528,6 +528,43 @@
 <h3 id="HelloWorld"><a href="#HelloWorld" class="headerlink" title="HelloWorld"></a>HelloWorld</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/6C7KDs"><img src="https://s3.ax1x.com/2021/02/28/6C7KDs.png" alt="新建第一个文件"></a><br><a target="_blank" rel="noopener" href="https://imgtu.com/i/6CqKDH"><img src="https://s3.ax1x.com/2021/02/28/6CqKDH.png" alt="代码示例"></a></p>
 <h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><h2 id="基本编译方法"><a href="#基本编译方法" class="headerlink" title="基本编译方法"></a>基本编译方法</h2><p>在项目所在目录打开命令行，输入<code>go build</code>或者 <code>go build -o 重新命的名.exe</code><br>在其他任何目录，输入<code>go build xx/xx/xx/项目目录（从GOATH/src/之后开始写起）</code><br>使用<code>go install</code>，不仅编译，而且会将编译好的文件放到<strong>GOPATH/bin</strong>目录下<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/6CLSit"><img src="https://s3.ax1x.com/2021/02/28/6CLSit.png" alt="执行go install"></a></p>
 <h2 id="跨平台编译"><a href="#跨平台编译" class="headerlink" title="跨平台编译"></a>跨平台编译</h2><p>假如我需要在windows上编译一个在Linux上运行的项目。编译前设置相关的环境变量<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/6CLNJx"><img src="https://s3.ax1x.com/2021/02/28/6CLNJx.png" alt="跨平台编译环境变量设置"></a><br>执行编译后得到了在linux下运行的可执行文件<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/6CLdSK"><img src="https://s3.ax1x.com/2021/02/28/6CLdSK.png" alt="编译"></a></p>
+<h1 id="Gorilla"><a href="#Gorilla" class="headerlink" title="Gorilla"></a>Gorilla</h1><h2 id="websocket"><a href="#websocket" class="headerlink" title="websocket"></a>websocket</h2><p>非用户主动请求而获取到的数据</p>
+<h2 id="通道与协程"><a href="#通道与协程" class="headerlink" title="通道与协程"></a>通道与协程</h2><pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">"fmt"</span>
+	<span class="token string">"time"</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token comment">//fmt.Printf("hello world")</span>
+	chA <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">)</span>
+	chB <span class="token operator">:=</span> <span class="token function">make</span><span class="token punctuation">(</span><span class="token keyword">chan</span> <span class="token builtin">int</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">for</span> <span class="token punctuation">{</span>
+			<span class="token keyword">select</span> <span class="token punctuation">{</span>
+			<span class="token keyword">case</span> va <span class="token operator">:=</span> <span class="token operator">&lt;-</span>chA<span class="token punctuation">:</span>
+				fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"channel A"</span><span class="token punctuation">,</span> va<span class="token punctuation">)</span>
+			<span class="token keyword">case</span> vb <span class="token operator">:=</span> <span class="token operator">&lt;-</span>chB<span class="token punctuation">:</span>
+				fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"channel B"</span><span class="token punctuation">,</span> vb<span class="token punctuation">)</span>
+			<span class="token keyword">default</span><span class="token punctuation">:</span>
+				time<span class="token punctuation">.</span><span class="token function">Sleep</span><span class="token punctuation">(</span>time<span class="token punctuation">.</span>Second <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span>
+				fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">"nothing happened"</span><span class="token punctuation">)</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	<span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		chA <span class="token operator">&lt;-</span> <span class="token number">1</span>
+		chA <span class="token operator">&lt;-</span> <span class="token number">2</span>
+	<span class="token punctuation">}</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+	chB <span class="token operator">&lt;-</span> <span class="token number">1</span>
+	chB <span class="token operator">&lt;-</span> <span class="token number">2</span>
+
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/6EsmE8"><img src="https://s3.ax1x.com/2021/03/03/6EsmE8.png" alt="代码运行截图1"></a></p>
 
                 
             </div>
@@ -637,30 +674,29 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/02/28/let-s-learn-golang-now/">
+                <a href="/2021/05/05/let-s-learn-git-now/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Let&#39;s Learn GoLang Now!">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Let&#39;s Learn Git Now!">
                         
-                        <span class="card-title">Let&#39;s Learn GoLang Now!</span>
+                        <span class="card-title">Let&#39;s Learn Git Now!</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Notes when learning Docker
+                            Notes when learning Git
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-28
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-05-05
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -673,12 +709,11 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/GoLang-IT-Skills/">
-                        <span class="chip bg-color">GoLang,IT,Skills</span>
+                    <a href="/tags/Git-IT-Skills/">
+                        <span class="chip bg-color">Git,IT,Skills</span>
                     </a>
                     
                 </div>
@@ -874,7 +909,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">9.6k</span>&nbsp;字
+                class="white-color">10k</span>&nbsp;字
             
             
             
